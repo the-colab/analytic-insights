@@ -1,0 +1,54 @@
+<html>
+<head><title>Sample Pandas Data</title></head>
+<body>
+<h1>Demo: Data-driven Conversations</h1>
+<style>
+.chartBox {
+	width: 700px;
+	padding: 20px;
+	border-radius: 20px;
+	border: solid 3px rgba(255, 26, 104, 1);
+	background: white;
+}
+</style>
+<div class="chartBox">
+	<canvas id="myChart"></canvas>
+</div>
+<script src="https://the-colab.github.io/analytic-insights/js/d3-7.6.1/d3.min.js"></script>
+<script type="text/javascript" src="https://the-colab.github.io/analytic-insights/js/chart-3.9.1/chart.min.js"></script>
+<script>
+
+const chartData = 'https://ale-dev.atlassian.net/wiki/download/attachments/343113729/pandas_simple.csv?api=v2'
+
+// parse the file from csv to json
+d3.csv(chartData).then(function(datapoints) {
+    console.log(datapoints)
+});
+
+// setup
+const data = {
+	labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+	datasets: [{
+		label: 'Weekly Sales',
+		data: [18, 12, 6, 9, 12, 3, 9],
+		borderWidth: 1
+	}]
+};
+// config
+const config = {
+	type: 'bar',
+	data,
+	options: {
+		scales: {
+			y: {
+				beginAtZero: true
+			}
+		}
+	}
+};
+// render init block
+const myChart = new Chart(document.getElementById('myChart'), config);
+</script>
+
+<p><i>&copy; Analytic Insights. All rights reserved.</i></p>
+</body></html>
