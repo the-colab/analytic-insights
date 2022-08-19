@@ -18,37 +18,78 @@
 <script type="text/javascript" src="https://the-colab.github.io/analytic-insights/js/chart-3.9.1/chart.min.js"></script>
 <script>
 
-const chartData = 'https://ale-dev.atlassian.net/wiki/download/attachments/343113729/pandas_simple.csv?api=v2'
+const chartData = 'https://the-colab.github.io/analytic-insights/data/sample_pandas.csv'
 
 // parse the file from csv to json
 d3.csv(chartData).then(function(datapoints) {
     console.log(datapoints)
+
+    const sprint = [];
+    const state = [];
+    const sp_committed = [];
+    const sp_added = [];
+    const sp_removed = [];
+    const sp_not_completed = [];
+    const sp_completed = [];
+    const completion_ratio = [];
+
+    for (i = 0; i < datapoints.length; i++) {
+        sprint.push(datapoints[i].sprint)
+        state.push(datapoints[i].state)
+        sp_committed.push(datapoints[i].sp_committed)
+        sp_added.push(datapoints[i].sp_added)
+        sp_removed.push(datapoints[i].sp_removed)
+        sp_not_completed.push(datapoints[i].sp_not_completed)
+        sp_completed.push(datapoints[i].sp_completed)
+
+        ratio = parseInt(datapoints[i].sp_completed*100/datapoints[i].sp_committed)
+        if (ratio) {
+            completion_ratio.push(ratio)
+        }
+        else {
+            completion_ratio.push(0)
+        }
+    }
+
+    console.log(sprint);
+    console.log(completion_ratio);
+
+    // setup
+    const data = {
+        labels: sprint,
+        datasets: [{
+            label: 'Completion Ratio',
+            data: completion_ratio,
+            borderWidth: 1,
+            fill: false,
+            borderColor:'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+    };
+
+    // config
+    const config = {
+        type: 'line',
+        data,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    // render init block
+    const myChart = new Chart(document.getElementById('myChart'), config);
 });
 
-// setup
-const data = {
-	labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-	datasets: [{
-		label: 'Weekly Sales',
-		data: [18, 12, 6, 9, 12, 3, 9],
-		borderWidth: 1
-	}]
-};
-// config
-const config = {
-	type: 'bar',
-	data,
-	options: {
-		scales: {
-			y: {
-				beginAtZero: true
-			}
-		}
-	}
-};
-// render init block
-const myChart = new Chart(document.getElementById('myChart'), config);
+
+
 </script>
+
+<p>Reference: <a href="https://www.youtube.com/watch?v=HFAjrai-d58">tutorial video 1</a></p>
+<p>Reference: <a href="https://www.youtube.com/watch?v=5H1s59jBmpw">tutorial video 2</a></p>
 
 <p><i>&copy; Analytic Insights. All rights reserved.</i></p>
 </body></html>
